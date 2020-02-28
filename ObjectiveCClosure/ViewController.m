@@ -9,15 +9,28 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-
 @end
 
 @implementation ViewController
+void (^completion)(void);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    [self myFunc:^{
+        NSLog(@"🦋Closure callback");
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            completion();
+        });
+    }];
+    
+    completion = ^(void){
+        NSLog(@"🦋Second closure callback");
+    };
 }
 
+-(void)myFunc:(void(^)(void))callback {
+    callback();
+}
 
 @end
